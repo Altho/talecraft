@@ -1,8 +1,9 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import NextAuth from "next-auth";
+import NextAuth, {NextAuthOptions} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { JWT as NextAuthJWT } from "next-auth/jwt";
 import { Session as NextAuthSession, User as NextAuthUser } from "next-auth";
+
+const backend = process.env.BACKEND_AUTH
 
 interface User extends NextAuthUser {
     accessToken: string;
@@ -27,7 +28,7 @@ interface JWT extends NextAuthJWT {
     };
 }
 
-const options = {
+const handler = NextAuth({
     providers: [
         CredentialsProvider({
             name: 'Credentials',
@@ -36,7 +37,7 @@ const options = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req) {
-                const res = await fetch(`http://localhost:5125/api/Auth/login`, {
+                const res = await fetch(`${backend}/login`, {
                     method: 'POST',
                     body: JSON.stringify(credentials),
                     headers: { 'Content-Type': 'application/json' },
@@ -73,6 +74,6 @@ const options = {
     session: {
         strategy: "jwt",
     },
-}
+})
 
-export default NextAuth(options)
+export { handler as GET, handler as POST };

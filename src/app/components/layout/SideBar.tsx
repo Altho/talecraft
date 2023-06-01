@@ -1,25 +1,18 @@
 'use client';
-import { useState } from 'react';
 import { createStyles, Navbar, Group, Code, getStylesRef, rem } from '@mantine/core';
+import { signOut } from "next-auth/react"
 import { useSession } from "next-auth/react"
 
 import {
-    IconBellRinging,
-    IconFingerprint,
-    IconKey,
-    IconSettings,
-    Icon2fa,
-    IconDatabaseImport,
-    IconReceipt2,
-    IconSwitchHorizontal,
     IconLogout,
+    IconLogin
 } from '@tabler/icons-react';
 
 
 const useStyles = createStyles((theme) => ({
     navbar: {
         backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,
-        position: 'sticky',
+        position: 'absolute',
         top: 0,
         left: 0,
         height: '100vh',
@@ -91,8 +84,6 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-
-
 export function SideBar() {
     const { classes, cx } = useStyles();
     const { data: session, status } = useSession()
@@ -107,15 +98,13 @@ export function SideBar() {
             </Navbar.Section>
 
             <Navbar.Section className={classes.footer}>
-                <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
-                    <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
-                    <span>Change account</span>
-                </a>
-
-                {status === "authenticated" ? <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+                {status === "authenticated" ? <a href="#" className={classes.link} onClick={() => signOut()}>
                     <IconLogout className={classes.linkIcon} stroke={1.5} />
                     <span>Logout</span>
-                </a> : <a href="/api/auth/signin" className={classes.link} /> }
+                </a> : <a href="/api/auth/signin" className={classes.link} >
+                    <IconLogin className={classes.linkIcon} stroke={1.5} />
+                    <span>Sign in</span>
+                </a>  }
 
             </Navbar.Section>
         </Navbar>

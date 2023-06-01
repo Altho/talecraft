@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import styles from './page.module.css'
 import { useSession } from "next-auth/react"
+import {SideBar} from "@/app/components/layout/SideBar";
 
 
 export default function Home() {
