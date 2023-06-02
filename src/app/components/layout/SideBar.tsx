@@ -5,17 +5,22 @@ import { useSession } from "next-auth/react"
 
 import {
     IconLogout,
-    IconLogin
+    IconLogin,
+    IconSettings,
+    IconPlus,
+    IconMap
 } from '@tabler/icons-react';
+import {ThemeToggle} from "@/app/components/layout/ThemeToggle";
 
 
 const useStyles = createStyles((theme) => ({
     navbar: {
-        backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,
+        backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.colorScheme === 'dark' ? 'dark' : 'blue' }).background,
         position: 'absolute',
         top: 0,
         left: 0,
         height: '100vh',
+        boxShadow: 'rgb(38, 57, 77) 0px 20px 30px -10px',
     },
 
     version: {
@@ -93,11 +98,23 @@ export function SideBar() {
         <Navbar height={700} width={{ sm: 300 }} p="md" className={classes.navbar}>
             <Navbar.Section grow>
                 <Group className={classes.header} position="apart">
-                    <Code className={classes.version}>v3.1.2</Code>
+                    <ThemeToggle/>
                 </Group>
+                <a href="/" className={classes.link} >
+                    <IconPlus className={classes.linkIcon} stroke={1.5} />
+                    <span>New Tale</span>
+                </a>
+                <a href="/" className={classes.link} >
+                    <IconMap className={classes.linkIcon} stroke={1.5} />
+                    <span>Manage Tales</span>
+                </a>
             </Navbar.Section>
 
             <Navbar.Section className={classes.footer}>
+                <a href="/" className={classes.link} >
+                    <IconSettings className={classes.linkIcon} stroke={1.5} />
+                    <span>Settings</span>
+                </a>
                 {status === "authenticated" ? <a href="#" className={classes.link} onClick={() => signOut()}>
                     <IconLogout className={classes.linkIcon} stroke={1.5} />
                     <span>Logout</span>
